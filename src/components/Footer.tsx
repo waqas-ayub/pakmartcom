@@ -33,7 +33,7 @@ export default function Footer() {
             <h4 className="font-display font-semibold mb-3">Contact</h4>
             <ul className="space-y-2 text-sm text-primary-foreground/70">
               <li>support@pakmart.pk</li>
-              <li>+92 300 1234567</li>
+              <li>+92 307 2560758</li>
             </ul>
           </div>
         </div>
