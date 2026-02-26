@@ -4,16 +4,11 @@ import Layout from "@/components/Layout";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuthContext } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Switch } from "@/components/ui/switch";
 import { toast } from "@/hooks/use-toast";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Badge } from "@/components/ui/badge";
-import { Plus, Pencil, Trash2, Loader2, Package, ShoppingBag } from "lucide-react";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Plus, Pencil, Trash2, Loader2, Package, ShoppingBag, ArrowLeft } from "lucide-react";
+import ProductForm from "@/components/admin/ProductForm";
 
 interface Product {
   id: string;
@@ -39,7 +34,6 @@ interface Order {
   shipping_address: string;
   phone: string;
   created_at: string;
-  profiles?: { full_name: string; email: string } | null;
   order_items: { id: string; product_name: string; quantity: number; price: number }[];
 }
 
@@ -52,13 +46,8 @@ export default function Admin() {
   const [categories, setCategories] = useState<Category[]>([]);
   const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(true);
-  const [productDialogOpen, setProductDialogOpen] = useState(false);
+  const [view, setView] = useState<"list" | "add" | "edit">("list");
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
-
-  // Product form
-  const [form, setForm] = useState({
-    name: "", description: "", price: "", sale_price: "", image_url: "", stock: "", featured: false, category_id: "",
-  });
 
   useEffect(() => {
     if (!authLoading && (!user || !isAdmin)) navigate("/");
@@ -77,53 +66,6 @@ export default function Admin() {
     setLoading(false);
   }
 
-  function openAddProduct() {
-    setEditingProduct(null);
-    setForm({ name: "", description: "", price: "", sale_price: "", image_url: "", stock: "", featured: false, category_id: "" });
-    setProductDialogOpen(true);
-  }
-
-  function openEditProduct(p: Product) {
-    setEditingProduct(p);
-    setForm({
-      name: p.name,
-      description: p.description || "",
-      price: String(p.price),
-      sale_price: p.sale_price ? String(p.sale_price) : "",
-      image_url: p.image_url || "",
-      stock: String(p.stock),
-      featured: p.featured,
-      category_id: p.category_id || "",
-    });
-    setProductDialogOpen(true);
-  }
-
-  async function handleSaveProduct(e: React.FormEvent) {
-    e.preventDefault();
-    const payload = {
-      name: form.name,
-      description: form.description,
-      price: parseFloat(form.price),
-      sale_price: form.sale_price ? parseFloat(form.sale_price) : null,
-      image_url: form.image_url,
-      stock: parseInt(form.stock) || 0,
-      featured: form.featured,
-      category_id: form.category_id || null,
-    };
-
-    if (editingProduct) {
-      const { error } = await supabase.from("products").update(payload).eq("id", editingProduct.id);
-      if (error) { toast({ variant: "destructive", title: "Error", description: error.message }); return; }
-      toast({ title: "Product updated!" });
-    } else {
-      const { error } = await supabase.from("products").insert(payload);
-      if (error) { toast({ variant: "destructive", title: "Error", description: error.message }); return; }
-      toast({ title: "Product added!" });
-    }
-    setProductDialogOpen(false);
-    fetchAll();
-  }
-
   async function deleteProduct(id: string) {
     if (!confirm("Delete this product?")) return;
     await supabase.from("products").delete().eq("id", id);
@@ -133,7 +75,7 @@ export default function Admin() {
 
   async function updateOrderStatus(orderId: string, status: string) {
     await supabase.from("orders").update({ status }).eq("id", orderId);
-    toast({ title: "Order updated" });
+    toast({ title: "Order status updated" });
     fetchAll();
   }
 
@@ -143,7 +85,7 @@ export default function Admin() {
 
   return (
     <Layout>
-      <div className="container py-8">
+      <div className="container py-8 max-w-4xl">
         <h1 className="font-display text-2xl font-bold mb-6">Admin Dashboard</h1>
 
         <Tabs defaultValue="products">
@@ -154,112 +96,78 @@ export default function Admin() {
 
           {/* Products Tab */}
           <TabsContent value="products">
-            <div className="flex justify-between items-center mb-4">
-              <h2 className="font-display font-semibold">Manage Products</h2>
-              <Dialog open={productDialogOpen} onOpenChange={setProductDialogOpen}>
-                <DialogTrigger asChild>
-                  <Button onClick={openAddProduct}><Plus className="h-4 w-4 mr-1" /> Add Product</Button>
-                </DialogTrigger>
-                <DialogContent className="max-w-lg max-h-[90vh] overflow-y-auto">
-                  <DialogHeader>
-                    <DialogTitle className="font-display">{editingProduct ? "Edit Product" : "Add Product"}</DialogTitle>
-                  </DialogHeader>
-                  <form onSubmit={handleSaveProduct} className="space-y-4">
-                    <div>
-                      <Label>Name</Label>
-                      <Input value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} required />
-                    </div>
-                    <div>
-                      <Label>Description</Label>
-                      <Textarea value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} />
-                    </div>
-                    <div className="grid grid-cols-2 gap-4">
-                      <div>
-                        <Label>Price (Rs.)</Label>
-                        <Input type="number" step="0.01" value={form.price} onChange={(e) => setForm({ ...form, price: e.target.value })} required />
-                      </div>
-                      <div>
-                        <Label>Sale Price (Rs.)</Label>
-                        <Input type="number" step="0.01" value={form.sale_price} onChange={(e) => setForm({ ...form, sale_price: e.target.value })} placeholder="Optional" />
-                      </div>
-                    </div>
-                    <div>
-                      <Label>Image URL</Label>
-                      <Input value={form.image_url} onChange={(e) => setForm({ ...form, image_url: e.target.value })} placeholder="https://..." />
-                    </div>
-                    <div className="grid grid-cols-2 gap-4">
-                      <div>
-                        <Label>Stock</Label>
-                        <Input type="number" value={form.stock} onChange={(e) => setForm({ ...form, stock: e.target.value })} required />
-                      </div>
-                      <div>
-                        <Label>Category</Label>
-                        <Select value={form.category_id} onValueChange={(v) => setForm({ ...form, category_id: v })}>
-                          <SelectTrigger><SelectValue placeholder="Select" /></SelectTrigger>
-                          <SelectContent>
-                            {categories.map((c) => (
-                              <SelectItem key={c.id} value={c.id}>{c.name}</SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select>
-                      </div>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <Switch checked={form.featured} onCheckedChange={(v) => setForm({ ...form, featured: v })} />
-                      <Label>Featured Product</Label>
-                    </div>
-                    <Button type="submit" className="w-full">{editingProduct ? "Update Product" : "Add Product"}</Button>
-                  </form>
-                </DialogContent>
-              </Dialog>
-            </div>
+            {view === "list" ? (
+              <>
+                <div className="flex justify-between items-center mb-4">
+                  <h2 className="font-display font-semibold">Your Products</h2>
+                  <Button onClick={() => { setEditingProduct(null); setView("add"); }}>
+                    <Plus className="h-4 w-4 mr-1" /> Add Product
+                  </Button>
+                </div>
 
-            <div className="bg-card border rounded-lg overflow-hidden">
-              <div className="overflow-x-auto">
-                <table className="w-full text-sm">
-                  <thead className="bg-muted text-muted-foreground">
-                    <tr>
-                      <th className="text-left p-3">Product</th>
-                      <th className="text-left p-3">Price</th>
-                      <th className="text-left p-3">Stock</th>
-                      <th className="text-left p-3">Featured</th>
-                      <th className="text-right p-3">Actions</th>
-                    </tr>
-                  </thead>
-                  <tbody>
+                {products.length === 0 ? (
+                  <div className="text-center py-16 bg-muted/30 rounded-xl border-2 border-dashed border-muted-foreground/20">
+                    <ShoppingBag className="h-12 w-12 mx-auto text-muted-foreground/40 mb-3" />
+                    <p className="text-muted-foreground font-medium">No products yet</p>
+                    <p className="text-sm text-muted-foreground/70 mb-4">Start by adding your first product</p>
+                    <Button onClick={() => { setEditingProduct(null); setView("add"); }}>
+                      <Plus className="h-4 w-4 mr-1" /> Add Your First Product
+                    </Button>
+                  </div>
+                ) : (
+                  <div className="grid gap-3">
                     {products.map((p) => (
-                      <tr key={p.id} className="border-t">
-                        <td className="p-3">
-                          <div className="flex items-center gap-3">
-                            <div className="w-10 h-10 rounded bg-muted overflow-hidden shrink-0">
-                              {p.image_url && <img src={p.image_url} alt="" className="w-full h-full object-cover" />}
+                      <div key={p.id} className="flex items-center gap-4 bg-card border rounded-lg p-3 hover:shadow-sm transition-shadow">
+                        <div className="w-14 h-14 rounded-lg bg-muted overflow-hidden shrink-0">
+                          {p.image_url ? (
+                            <img src={p.image_url} alt={p.name} className="w-full h-full object-cover" />
+                          ) : (
+                            <div className="w-full h-full flex items-center justify-center text-muted-foreground/40">
+                              <ShoppingBag className="h-6 w-6" />
                             </div>
-                            <span className="font-medium line-clamp-1">{p.name}</span>
+                          )}
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <p className="font-medium truncate">{p.name}</p>
+                          <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                            <span>Rs. {p.price.toLocaleString()}</span>
+                            {p.sale_price && <span className="text-destructive">→ Rs. {p.sale_price.toLocaleString()}</span>}
+                            <span>•</span>
+                            <span>{p.stock} in stock</span>
+                            {p.featured && <span>• ⭐</span>}
                           </div>
-                        </td>
-                        <td className="p-3">
-                          Rs. {p.price.toLocaleString()}
-                          {p.sale_price && <span className="text-destructive text-xs ml-1">→ {p.sale_price.toLocaleString()}</span>}
-                        </td>
-                        <td className="p-3">{p.stock}</td>
-                        <td className="p-3">{p.featured ? "⭐" : "—"}</td>
-                        <td className="p-3 text-right">
-                          <Button variant="ghost" size="icon" onClick={() => openEditProduct(p)}>
+                        </div>
+                        <div className="flex gap-1 shrink-0">
+                          <Button variant="ghost" size="icon" onClick={() => { setEditingProduct(p); setView("edit"); }}>
                             <Pencil className="h-4 w-4" />
                           </Button>
                           <Button variant="ghost" size="icon" className="text-destructive" onClick={() => deleteProduct(p.id)}>
                             <Trash2 className="h-4 w-4" />
                           </Button>
-                        </td>
-                      </tr>
+                        </div>
+                      </div>
                     ))}
-                    {products.length === 0 && (
-                      <tr><td colSpan={5} className="p-8 text-center text-muted-foreground">No products yet. Add your first product!</td></tr>
-                    )}
-                  </tbody>
-                </table>
-              </div>
-            </div>
+                  </div>
+                )}
+              </>
+            ) : (
+              <>
+                <Button variant="ghost" size="sm" className="mb-4" onClick={() => setView("list")}>
+                  <ArrowLeft className="h-4 w-4 mr-1" /> Back to Products
+                </Button>
+                <div className="bg-card border rounded-xl p-6">
+                  <h2 className="font-display font-semibold text-lg mb-4">
+                    {view === "edit" ? "Edit Product" : "Add New Product"}
+                  </h2>
+                  <ProductForm
+                    categories={categories}
+                    editingProduct={editingProduct}
+                    onSaved={() => { setView("list"); fetchAll(); }}
+                    onCancel={() => setView("list")}
+                  />
+                </div>
+              </>
+            )}
           </TabsContent>
 
           {/* Orders Tab */}
