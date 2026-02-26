@@ -50,7 +50,7 @@ export default function Admin() {
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
 
   useEffect(() => {
-    if (!authLoading && (!user || !isAdmin)) navigate("/");
+    if (!authLoading && !user) navigate("/auth");
     if (user && isAdmin) fetchAll();
   }, [user, isAdmin, authLoading]);
 
@@ -79,8 +79,16 @@ export default function Admin() {
     fetchAll();
   }
 
-  if (authLoading || loading) {
+  if (authLoading || (user && isAdmin && loading)) {
     return <Layout><div className="flex justify-center py-32"><Loader2 className="h-8 w-8 animate-spin text-primary" /></div></Layout>;
+  }
+
+  if (!user) {
+    return <Layout><div className="text-center py-32 text-muted-foreground">Please sign in to access admin dashboard.</div></Layout>;
+  }
+
+  if (!isAdmin) {
+    return <Layout><div className="text-center py-32 text-muted-foreground">You don't have admin access.</div></Layout>;
   }
 
   return (
