@@ -1,71 +1,55 @@
-# 🛒 PakMart — Full-Stack Modern E-Commerce Platform
+<div align="center">
 
-> **PakMart** ek modern, full-stack E-commerce platform hai jise scalable architecture aur seamless user shopping experience ko dhyan mein rakh kar banaya gaya hai. Yeh platform fast product browsing, real-time cart state management, Supabase database integration, aur ek dedicated Admin Management Dashboard provide karta hai.
+# 🛒 PakMart — Modern Full-Stack E-Commerce Platform
+
+[![Deploy Status](https://img.shields.io/badge/Deployment-Live-brightgreen?style=for-the-badge&logo=vercel)](https://preview--pakmartcom.lovable.app/)
+[![Tech Stack](https://img.shields.io/badge/Stack-React%20%7C%20TypeScript%20%7C%20Supabase-blue?style=for-the-badge&logo=react)](https://preview--pakmartcom.lovable.app/)
+[![UI Library](https://img.shields.io/badge/UI-shadcn%2Fui-black?style=for-the-badge&logo=radixui)](https://ui.shadcn.com/)
+
+**PakMart** is an enterprise-grade, full-stack e-commerce solution engineered for high scalability, real-time state synchronization, and an intuitive user experience. Built with a modular component architecture, robust authentication pipelines, and interactive analytics dashboards.
+
+[Explore Live Platform](https://preview--pakmartcom.lovable.app/) • [Report Bug](https://github.com/waqas-ayub/pakmart/issues)
+
+</div>
 
 ---
 
-## 🌐 Live Application
-* **Live Demo:** [PakMart Web App](https://preview--pakmartcom.lovable.app/)
+## 📸 Platform Overview
 
----
+<div align="center">
 
-## 📸 Application Interface
-
-| Home & Product Storefront | Checkout & Admin Dashboard |
+| Consumer Storefront | Administrative Control Center |
 | :---: | :---: |
-| `<img width="947" alt="PakMart Home" src="YOUR_HOMEPAGE_SCREENSHOT_LINK_HERE" />` | `<img width="953" alt="PakMart Admin" src="YOUR_ADMIN_SCREENSHOT_LINK_HERE" />` |
+| <img width="950" alt="PakMart Storefront Preview" src="YOUR_HOMEPAGE_SCREENSHOT_LINK_HERE" /> | <img width="950" alt="PakMart Admin Analytics Preview" src="YOUR_ADMIN_SCREENSHOT_LINK_HERE" /> |
+
+</div>
 
 ---
 
-## ✨ Key Features (A to Z)
+## 🌟 Core Architecture & Feature Matrix
 
-### 🛍️ Shopper Experience
-* **Dynamic Product Catalog & Filtering:** Clean layout along with interactive product detail views (`ProductDetail.tsx`).
-* **Real-Time Shopping Cart:** Persistent state management for updating items, quantities, and price calculations (`CartContext.tsx`).
-* **Wishlist Management:** Users can save favorite items for later viewing (`WishlistContext.tsx`).
-* **Seamless Checkout Process:** Multi-step order submission flow with input validation (`Checkout.tsx`).
-* **Order History & Tracking:** Registered users can track previous purchases and order statuses (`Orders.tsx`).
+### 🛍️ E-Commerce Engine
+* **Dynamic Product Navigation:** Responsive layout featuring deep route dynamic rendering and parameter-based catalog browsing (`ProductDetail.tsx`).
+* **Optimized Cart State Management:** High-performance persistent context managing line-item mutations, quantity bounds, and real-time order subtotal computation (`CartContext.tsx`).
+* **Persistent Wishlist Sync:** Customer item bookmarking engine backed by local state and account reference handlers (`WishlistContext.tsx`).
+* **Structured Checkout Funnel:** Multi-stage checkout process with transactional state validation and input sanitization (`Checkout.tsx`).
+* **Customer Order History:** Historical ledger interface providing real-time lifecycle tracking of user purchases (`Orders.tsx`).
 
-### 🔒 Authentication & Database
-* **Supabase Integration:** Secure database connectivity for product storage, user management, and order records (`@supabase/supabase-js`).
-* **User Authentication:** Auth state context supporting registration, login, and protected routes (`AuthContext.tsx`).
+### 🔒 Enterprise Backend & Authentication
+* **Supabase Infrastructure:** Cloud-native PostgreSQL integration managing scalable product schemas, customer relational datasets, and transaction logs.
+* **Granular Auth Management:** Protected route guards and session handling supporting multi-role platform access (`AuthContext.tsx`).
 
-### 📊 Admin Panel & Management
-* **Dedicated Admin Dashboard:** Comprehensive store administration view (`Admin.tsx`).
-* **Sales Analytics & Visual Insights:** Interactive charts and sales reporting powered by `Recharts`.
-* **Inventory & Order Management:** Direct overview of active customer orders and product catalog inventory.
+### 📊 Administrative & Analytics Dashboard
+* **Real-Time Merchant Portal:** Comprehensive operational console designed for store management (`Admin.tsx`).
+* **Visual Data Intelligence:** Interactive metrics visualization covering revenue streams, conversion rates, and fulfillment trends powered by `Recharts`.
+* **Inventory Control System:** Direct CRUD interface for catalog updates, stock tracking, and incoming order management.
 
-### 🎨 UI & UX Features
-* **Modern Component System:** Built using `shadcn/ui` components based on Radix UI primitives.
-* **Fluid Animations:** Smooth transitions powered by `Framer Motion`.
-* **Dark / Light Mode:** Native theme switcher using `next-themes`.
-* **Toast Notifications:** Real-time visual feedback using `Sonner` and `Toaster`.
-
----
-
-## 🛠 Tech Stack & Architecture
-
-* **Frontend Framework:** React 18 + Vite
-* **Language:** TypeScript
-* **State Management:** React Context API (`Auth`, `Cart`, `Wishlist`) + `@tanstack/react-query`
-* **Backend & Database:** Supabase (`@supabase/supabase-js`)
-* **UI & Styling:** Tailwind CSS + `shadcn/ui` + Radix UI
-* **Icons & Visuals:** Lucide React + Recharts
-* **Form Validation:** React Hook Form + Zod (`@hookform/resolvers`)
-* **Build Tool & Testing:** Vite + SWC + Vitest
+### 🎨 Design System & User Interface
+* **Component-Driven UI:** Constructed on `shadcn/ui` and Radix UI primitives for full accessibility and UI consistency.
+* **Hardware-Accelerated Motion:** Seamless micro-interactions and transitions orchestrated via `Framer Motion`.
+* **Adaptive Theme Engine:** System-aware native Dark and Light mode customization (`next-themes`).
+* **Feedback Architecture:** Real-time user event feedback provided through toast notification streams (`Sonner` & `Toaster`).
 
 ---
 
-## 🚀 Getting Started (Local Development)
-
-Follow these steps to run PakMart locally on your machine:
-
-### Prerequisites
-Ensure you have **Node.js** (v18+) and **npm** installed.
-
-### Installation
-
-1. **Clone the repository:**
-   ```bash
-   git clone [https://github.com/waqas-ayub/pakmart.git](https://github.com/waqas-ayub/pakmart.git)
-   cd pakmart
+## 🛠 Tech Stack & Ecosystem
