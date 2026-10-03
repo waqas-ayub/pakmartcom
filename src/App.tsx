@@ -7,15 +7,17 @@ import { CartProvider } from "@/contexts/CartContext";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { WishlistProvider } from "@/contexts/WishlistContext";
 import { ThemeProvider } from "@/components/ThemeProvider";
+import { lazy, Suspense } from "react";
 import Index from "./pages/Index";
-import ProductDetail from "./pages/ProductDetail";
-import Cart from "./pages/Cart";
-import Checkout from "./pages/Checkout";
-import Auth from "./pages/Auth";
-import Orders from "./pages/Orders";
-import Admin from "./pages/Admin";
-import Wishlist from "./pages/Wishlist";
-import NotFound from "./pages/NotFound";
+
+const ProductDetail = lazy(() => import("./pages/ProductDetail"));
+const Cart = lazy(() => import("./pages/Cart"));
+const Checkout = lazy(() => import("./pages/Checkout"));
+const Auth = lazy(() => import("./pages/Auth"));
+const Orders = lazy(() => import("./pages/Orders"));
+const Admin = lazy(() => import("./pages/Admin"));
+const Wishlist = lazy(() => import("./pages/Wishlist"));
+const NotFound = lazy(() => import("./pages/NotFound"));
 
 const queryClient = new QueryClient();
 

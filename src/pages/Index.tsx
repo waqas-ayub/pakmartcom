@@ -36,31 +36,38 @@ export default function Index() {
   const [page, setPage] = useState(1);
   const perPage = 20;
 
+  // Fetch categories once — they don't change with filters
+  useEffect(() => {
+    supabase.from("categories").select("*").order("name")
+      .then(({ data }) => setCategories((data as Category[]) || []));
+  }, []);
+
   useEffect(() => { fetchData(); }, [searchQuery, activeCategory, sortBy, page]);
 
   async function fetchData() {
     setLoading(true);
-    const [catRes, prodRes, reviewRes] = await Promise.all([
-      supabase.from("categories").select("*").order("name"),
-      buildProductQuery(),
-      supabase.from("reviews").select("product_id, rating"),
-    ]);
-    setCategories((catRes.data as Category[]) || []);
+    const prodRes = await buildProductQuery();
+    const rawProds = (prodRes.data as Product[]) || [];
 
-    // Calculate avg ratings
-    const reviewMap: Record<string, { sum: number; count: number }> = {};
-    (reviewRes.data || []).forEach((r: any) => {
-      if (!reviewMap[r.product_id]) reviewMap[r.product_id] = { sum: 0, count: 0 };
-      reviewMap[r.product_id].sum += r.rating;
-      reviewMap[r.product_id].count += 1;
-    });
+    // Only fetch reviews for the products on this page
+    let reviewMap: Record<string, { sum: number; count: number }> = {};
+    if (rawProds.length > 0) {
+      const { data: reviews } = await supabase
+        .from("reviews")
+        .select("product_id, rating")
+        .in("product_id", rawProds.map((p) => p.id));
+      (reviews || []).forEach((r: any) => {
+        if (!reviewMap[r.product_id]) reviewMap[r.product_id] = { sum: 0, count: 0 };
+        reviewMap[r.product_id].sum += r.rating;
+        reviewMap[r.product_id].count += 1;
+      });
+    }
 
-    const prods = ((prodRes.data as Product[]) || []).map((p) => ({
+    setProducts(rawProds.map((p) => ({
       ...p,
       rating: reviewMap[p.id] ? reviewMap[p.id].sum / reviewMap[p.id].count : 0,
       review_count: reviewMap[p.id]?.count || 0,
-    }));
-    setProducts(prods);
+    })));
     setLoading(false);
   }
 
