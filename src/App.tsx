@@ -31,17 +31,19 @@ const App = () => (
           <AuthProvider>
             <CartProvider>
               <WishlistProvider>
-                <Routes>
-                  <Route path="/" element={<Index />} />
-                  <Route path="/product/:id" element={<ProductDetail />} />
-                  <Route path="/cart" element={<Cart />} />
-                  <Route path="/checkout" element={<Checkout />} />
-                  <Route path="/auth" element={<Auth />} />
-                  <Route path="/orders" element={<Orders />} />
-                  <Route path="/admin" element={<Admin />} />
-                  <Route path="/wishlist" element={<Wishlist />} />
-                  <Route path="*" element={<NotFound />} />
-                </Routes>
+                <Suspense fallback={<div className="flex justify-center items-center min-h-screen"><div className="h-8 w-8 animate-spin rounded-full border-4 border-primary border-t-transparent" /></div>}>
+                  <Routes>
+                    <Route path="/" element={<Index />} />
+                    <Route path="/product/:id" element={<ProductDetail />} />
+                    <Route path="/cart" element={<Cart />} />
+                    <Route path="/checkout" element={<Checkout />} />
+                    <Route path="/auth" element={<Auth />} />
+                    <Route path="/orders" element={<Orders />} />
+                    <Route path="/admin" element={<Admin />} />
+                    <Route path="/wishlist" element={<Wishlist />} />
+                    <Route path="*" element={<NotFound />} />
+                  </Routes>
+                </Suspense>
               </WishlistProvider>
             </CartProvider>
           </AuthProvider>
