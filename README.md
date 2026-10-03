@@ -1,73 +1,71 @@
-# Welcome to your Lovable project
+# 🛒 PakMart — Full-Stack Modern E-Commerce Platform
 
-## Project info
+> **PakMart** ek modern, full-stack E-commerce platform hai jise scalable architecture aur seamless user shopping experience ko dhyan mein rakh kar banaya gaya hai. Yeh platform fast product browsing, real-time cart state management, Supabase database integration, aur ek dedicated Admin Management Dashboard provide karta hai.
 
-**URL**: https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID
+---
 
-## How can I edit this code?
+## 🌐 Live Application
+* **Live Demo:** [PakMart Web App](https://preview--pakmartcom.lovable.app/)
 
-There are several ways of editing your application.
+---
 
-**Use Lovable**
+## 📸 Application Interface
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and start prompting.
+| Home & Product Storefront | Checkout & Admin Dashboard |
+| :---: | :---: |
+| `<img width="947" alt="PakMart Home" src="YOUR_HOMEPAGE_SCREENSHOT_LINK_HERE" />` | `<img width="953" alt="PakMart Admin" src="YOUR_ADMIN_SCREENSHOT_LINK_HERE" />` |
 
-Changes made via Lovable will be committed automatically to this repo.
+---
 
-**Use your preferred IDE**
+## ✨ Key Features (A to Z)
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+### 🛍️ Shopper Experience
+* **Dynamic Product Catalog & Filtering:** Clean layout along with interactive product detail views (`ProductDetail.tsx`).
+* **Real-Time Shopping Cart:** Persistent state management for updating items, quantities, and price calculations (`CartContext.tsx`).
+* **Wishlist Management:** Users can save favorite items for later viewing (`WishlistContext.tsx`).
+* **Seamless Checkout Process:** Multi-step order submission flow with input validation (`Checkout.tsx`).
+* **Order History & Tracking:** Registered users can track previous purchases and order statuses (`Orders.tsx`).
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+### 🔒 Authentication & Database
+* **Supabase Integration:** Secure database connectivity for product storage, user management, and order records (`@supabase/supabase-js`).
+* **User Authentication:** Auth state context supporting registration, login, and protected routes (`AuthContext.tsx`).
 
-Follow these steps:
+### 📊 Admin Panel & Management
+* **Dedicated Admin Dashboard:** Comprehensive store administration view (`Admin.tsx`).
+* **Sales Analytics & Visual Insights:** Interactive charts and sales reporting powered by `Recharts`.
+* **Inventory & Order Management:** Direct overview of active customer orders and product catalog inventory.
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+### 🎨 UI & UX Features
+* **Modern Component System:** Built using `shadcn/ui` components based on Radix UI primitives.
+* **Fluid Animations:** Smooth transitions powered by `Framer Motion`.
+* **Dark / Light Mode:** Native theme switcher using `next-themes`.
+* **Toast Notifications:** Real-time visual feedback using `Sonner` and `Toaster`.
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+---
 
-# Step 3: Install the necessary dependencies.
-npm i
+## 🛠 Tech Stack & Architecture
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
-```
+* **Frontend Framework:** React 18 + Vite
+* **Language:** TypeScript
+* **State Management:** React Context API (`Auth`, `Cart`, `Wishlist`) + `@tanstack/react-query`
+* **Backend & Database:** Supabase (`@supabase/supabase-js`)
+* **UI & Styling:** Tailwind CSS + `shadcn/ui` + Radix UI
+* **Icons & Visuals:** Lucide React + Recharts
+* **Form Validation:** React Hook Form + Zod (`@hookform/resolvers`)
+* **Build Tool & Testing:** Vite + SWC + Vitest
 
-**Edit a file directly in GitHub**
+---
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+## 🚀 Getting Started (Local Development)
 
-**Use GitHub Codespaces**
+Follow these steps to run PakMart locally on your machine:
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+### Prerequisites
+Ensure you have **Node.js** (v18+) and **npm** installed.
 
-## What technologies are used for this project?
+### Installation
 
-This project is built with:
-
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
-
-## How can I deploy this project?
-
-Simply open [Lovable](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and click on Share -> Publish.
-
-## Can I connect a custom domain to my Lovable project?
-
-Yes, you can!
-
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
-
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+1. **Clone the repository:**
+   ```bash
+   git clone [https://github.com/waqas-ayub/pakmart.git](https://github.com/waqas-ayub/pakmart.git)
+   cd pakmart
