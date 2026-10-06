@@ -21,8 +21,12 @@ export function WishlistProvider({ children }: { children: ReactNode }) {
   }, [user]);
 
   async function fetchWishlist() {
-    const { data } = await supabase.from("wishlist").select("product_id").eq("user_id", user!.id);
-    setWishlistIds(new Set((data || []).map((w: any) => w.product_id)));
+    try {
+      const { data } = await supabase.from("wishlist").select("product_id").eq("user_id", user!.id);
+      setWishlistIds(new Set((data || []).map((w: any) => w.product_id)));
+    } catch (e) {
+      console.warn("[PakMart] Could not load wishlist:", e);
+    }
   }
 
   const toggleWishlist = useCallback(async (productId: string) => {
