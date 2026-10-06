@@ -24,12 +24,22 @@ const CartContext = createContext<CartContextType | undefined>(undefined);
 
 export function CartProvider({ children }: { children: ReactNode }) {
   const [items, setItems] = useState<CartItem[]>(() => {
-    const saved = localStorage.getItem("pakmart-cart");
-    return saved ? JSON.parse(saved) : [];
+    try {
+      const saved = localStorage.getItem("pakmart-cart");
+      const parsed = saved ? JSON.parse(saved) : [];
+      return Array.isArray(parsed) ? parsed : [];
+    } catch (e) {
+      console.warn("[PakMart] Could not read saved cart, starting fresh", e);
+      return [];
+    }
   });
 
   useEffect(() => {
-    localStorage.setItem("pakmart-cart", JSON.stringify(items));
+    try {
+      localStorage.setItem("pakmart-cart", JSON.stringify(items));
+    } catch (e) {
+      console.warn("[PakMart] Could not save cart", e);
+    }
   }, [items]);
 
   const addItem = (item: Omit<CartItem, "quantity">) => {
